@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.test import TestCase
-from .models import Customer, Copy, Title
+from .models import Customer, Copy, Title, Loan
 
 
 class CustomerModelTests(TestCase):
@@ -71,3 +71,42 @@ class CustomerModelTests(TestCase):
         self.assertEqual(customer.email, 'lubiepomarancze@gmail.com')
         self.assertEqual(customer.phone_number, '966-858-477')
         self.assertEqual(customer.loan_limit, 77777777777007777777777)
+
+    def test_copy_creation(self):
+        copy = Copy.objects.create(
+            signature='Stephen King',
+            is_available=True,
+            is_in_bibliomat=True,
+            title='The Outsider',
+        )
+        self.assertEqual(copy.signature, 'Stephen King')
+        self.assertEqual(copy.is_available, True)
+        self.assertEqual(copy.is_in_bibliomat, True)
+        self.assertEqual(copy.title, 'The Outsider')
+
+    def test_title_creation(self):
+        title = Title.objects.create(
+            title='The Outsider',
+            author='Stephen King',
+            description='Bestialska zbrodnia. Śledztwo pełne znaków zapytania. Stephen King, znajdujący się w...',
+            max_loan_period='62',
+        )
+        self.assertEqual(title.title, 'The Outsider')
+        self.assertEqual(title.author, 'Stephen King')
+        self.assertEqual(title.description, 'Bestialska zbrodnia. Śledztwo pełne znaków zapytania. Stephen King, '
+                                            'znajdujący się w...')
+        self.assertEqual(title.max_loan_period, '62')
+
+    def test_loan_creation(self):
+        loan = Loan.objects.create(
+            copy='2578',
+            customer='Tomek Gondek',
+            loan_date='25.02.2023',
+            return_date='25.03.2023',
+            is_delayed='0',
+        )
+        self.assertEqual(loan.copy, '2578')
+        self.assertEqual(loan.customer, 'Tomek Gondek')
+        self.assertEqual(loan.loan_date, '25.02.2023')
+        self.assertEqual(loan.return_date, '25.03.2023')
+        self.assertEqual(loan.is_delayed, '0')
