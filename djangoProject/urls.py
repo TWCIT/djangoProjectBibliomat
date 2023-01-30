@@ -16,6 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+
+from polls import views
+from polls.views import title_list, title_detail, loan_list, order_form, test_app
+
 urlpatterns = [
+    path('/', test_app),
     path('admin/', admin.site.urls),
+    path('titles/', title_list, name='title_list'),
+    path('titles/<int:title_id>/', title_detail, name='title_detail'),
+    path('loans/<int:customer_id>/', loan_list, name='loan_list'),
+    path('order/<int:copy_id>/', order_form, name='order_form'),
 ]

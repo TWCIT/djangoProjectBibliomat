@@ -1,0 +1,30 @@
+<h1>{{ title.title }}</h1>
+<p>Autor: {{ title.author }}</p>
+<p>Opis: {{ title.description }}</p>
+<p>Maksymalny okres wypożyczenia: {{ title.loan_period }} dni</p>
+
+<h2>Dostępne egzemplarze</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Sygnatura</th>
+      <th>Dostępność</th>
+      <th>Bibliomat</th>
+      <th>Akcja</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for copy in title.copies.all %}
+    <tr>
+      <td>{{ copy.signature }}</td>
+      <td>{% if copy.is_available %}Dostępny{% else %}Niedostępny{% endif %}</td>
+      <td>{% if copy.pick_up_in_bibliomat %}Tak{% else %}Nie{% endif %}</td>
+        <td>
+            {% if copy.is_available %}
+        <a href="{% url 'order_form' copy.id %}">Zamów</a>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
