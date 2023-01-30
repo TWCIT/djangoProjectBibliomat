@@ -1,13 +1,13 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .forms import OrderForm
 from .models import Title,Copy,Loan
 
 def test_app(request, title_id):
 
-    return render(request, 'test.html')
+    return render(request, 'test_app.html')
 def title_list(request):
     titles = Title.objects.all()
     # Sortowanie według tytułu
@@ -31,12 +31,15 @@ def loan_list(request, customer_id):
     return render(request, 'loan_list.html', context)
 def order_form(request, copy_id):
     copy = get_object_or_404(Copy, pk=copy_id)
+    user = request.user
+    if not user.is_authenticated:
+        return redirect('title_list')
     context = {}
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
             # Pobieranie danych z formularza
-            customer = form.cleaned_data['customer']
+            customer = user.customer
             pick_up_in_bibliomat = form.cleaned_data['pick_up_in_bibliomat']
             # Sprawdzenie, czy klient ma dostępny limit
             if customer.loan_limit > customer.loans.count():
@@ -44,9 +47,9 @@ def order_form(request, copy_id):
                 copy.is_available = False
                 copy.save()
                 # Tworzenie nowego wypożyczenia
-                loan = Loan.objects.create(copy=copy, customer=customer, pick_up_in_bibliomat=pick_up_in_bibliomat)
+                loan = Loan.objects.create(copy=copy, customer=customer) #pick_up_in_bibliomat=pick_up_in_bibliomat)
                 context = {'loan': loan}
-                return render(request, 'order_success.html', context)
+                return redirect('title_list')
             else:
                 error = "Nie masz dostępnego limitu wypożyczeń"
                 context = {'form': form, 'error': error}

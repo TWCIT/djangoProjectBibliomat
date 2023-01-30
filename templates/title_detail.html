@@ -14,7 +14,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for copy in title.copies.all %}
+    {% for copy in copies %}
     <tr>
       <td>{{ copy.signature }}</td>
       <td>{% if copy.is_available %}Dostępny{% else %}Niedostępny{% endif %}</td>

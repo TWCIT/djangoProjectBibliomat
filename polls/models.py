@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -8,6 +9,7 @@ class Customer(models.Model):
     email = models.EmailField()
     phone_number = models.CharField(max_length=15)
     loan_limit = models.PositiveIntegerField()
+    user = models.OneToOneField(User, models.CASCADE, related_name='customer')
 
 class Title(models.Model):
     title = models.CharField(max_length=255)
@@ -21,7 +23,7 @@ class Copy(models.Model):
     title = models.ForeignKey(Title, on_delete=models.CASCADE)
 class Loan(models.Model):
     copy = models.ForeignKey(Copy, on_delete=models.CASCADE)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    loan_date = models.DateField()
-    return_date = models.DateField()
-    is_delayed = models.BooleanField()
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='loans')
+    loan_date = models.DateField(null=True)
+    return_date = models.DateField(null=True)
+    is_delayed = models.BooleanField(default=False)
