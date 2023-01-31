@@ -20,6 +20,7 @@ from django.views.generic.base import RedirectView
 
 from polls import views
 from polls.views import title_list, title_detail, loan_list, order_form, test_app
+from machine.urls import urlpatterns as machine_urls
 
 urlpatterns = [
     path('', RedirectView.as_view(pattern_name='title_list')),
@@ -29,4 +30,5 @@ urlpatterns = [
     path('titles/<int:title_id>/', title_detail, name='title_detail'),
     path('loans/<int:customer_id>/', loan_list, name='loan_list'),
     path('order/<int:copy_id>/', order_form, name='order_form'),
+    path('machine/', include(machine_urls))
 ]
