@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bibliomat</title>
+</head>
+<body>
+    {% if user.is_authenticated %}
+    <a href="{% url 'machine-deposit-list' %}">Twoje depozyty</a>
+    {% endif %}
+    {% include 'title_list.html' %}
+</body>
+</html>

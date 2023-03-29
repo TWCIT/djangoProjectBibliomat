@@ -1,0 +1,9 @@
+<h1>Zamówienie egzemplarza</h1>
+
+<form method="post">
+  {% csrf_token %}
+  <label for="pick_up_in_bibliomat">Czy chcesz odebrać w bibliomacie?</label>
+  <input type="checkbox" name="pick_up_in_bibliomat" id="pick_up_in_bibliomat" {% if form.pick_up_in_bibliomat %}checked{% endif %}>
+  <br>
+  <input type="submit" value="Zamów">
+</form>
